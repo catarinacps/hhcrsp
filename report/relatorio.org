@@ -1,0 +1,43 @@
+# -*- org-export-babel-evaluate: nil -*-
+# -*- coding: utf-8 -*-
+# -*- mode: org -*-
+
+#+title: *Metaheurística Simulated Annealing para o HHCRSP*
+#+options: toc:nil author:nil
+#+tags: noexport(n) ignore(i)
+#+language: pt-br
+
+#+latex_class: article
+#+latex_class_options: [twocolumn, a4paper]
+
+#+latex_header: \usepackage[margin=1in]{geometry}
+#+latex_header: \usepackage[blocks]{authblk}
+#+latex_header: \usepackage{titling}
+#+latex_header: \usepackage{palatino}
+#+latex_header: \usepackage{graphicx}
+#+latex_header: \usepackage{lipsum}
+#+latex_header: \usepackage{algpseudocode}
+#+latex_header: \usepackage[linesnumbered, ruled, vlined]{algorithm2e}
+#+latex_header: \usepackage[brazilian]{babel}
+#+latex_header: \renewcommand\Authsep{\\}
+#+latex_header: \renewcommand\Authand{\\}
+#+latex_header: \renewcommand\Authands{\\}
+#+latex_header: \author{Felipe Colombelli}
+#+latex_header: \author{Victor dos Santos Melo}
+#+latex_header: \author{Henrique Corrêa Pereira da Silva}
+#+latex_header: \affil[1]{Instituto de Informática\\Universidade Federal do Rio Grande do Sul}
+#+latex_header: \affil[ ]{\normalsize\texttt{\{fcolombelli, glmiotto, hcpsilva\}@inf.ufrgs.br}}
+
+#+latex_header: \setlength{\droptitle}{-1.2cm}
+#+latex_header: \usemintedstyle{manni}
+
+
+* Resumo                                                             :ignore:
+
+#+begin_abstract
+Um resumo aqui (creio que trabalhos de disciplina não necessitem de introdução)
+#+end_abstract
+
+* Sumário                                                            :ignore:
+
+#+toc: headlines 4
