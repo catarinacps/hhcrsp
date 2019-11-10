@@ -1,0 +1,11 @@
+#+title: HHCRSP-SA lab-book
+#+author: Henrique Silva
+#+email: hcpsilva@inf.ufrgs.br
+#+infojs_opt:
+#+property: session *R*
+#+property: cache yes
+#+property: results graphics
+#+property: exports both
+#+property: tangle yes
+
+Welcome to the project lab-book! There's nothing here :)

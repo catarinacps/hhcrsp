@@ -1,0 +1,69 @@
+#+title: HHCRSP implementado utilizando /Simulated Annealing/
+#+author: Henrique Silva
+#+email: hcpsilva@inf.ufrgs.br
+#+infojs_opt:
+#+property: cache yes
+
+Como trabalho final da disciplina de Otimização Combinatória, implementaremos o
+problema /The home health care routing and scheduling problem with
+interdependent services/ utilizando ambos /solver/ matemático e a
+meta-heurística /Simulated Annealing/!
+
+** Sumário                                                           :TOC_3:
+  - [[#definição][Definição]]
+  - [[#objetivo][Objetivo]]
+  - [[#linguagem][Linguagem]]
+  - [[#contato][Contato]]
+
+** Definição
+
+Considere um conjunto de veículos V, e um conjunto C que representam pacientes
+de um plano de saúde. O plano de saúde contempla atendimentos de um conjunto de
+especialidades médicas S e tanto pacientes quanto profissionais da saúde só
+podem requisitar ou prestar atendimento de especialidades cobertas pelo plano.
+
+No problema de home care, considera-se que cada veículo tem uma equipe de
+profissionais de saúde fixa. Em outras palavras, um veículo só pode atender uma
+certa especialidade médica caso haja um profissional adequado na equipe do
+veículo. Todos os veículos partem, inicialmente, de uma garagem central, e devem
+retornar para ela no final das suas operações. Cada paciente do problema possui
+uma ou mais demandas de saúde que devem ser atendidas por algum dos veículos do
+problema. Cada demanda refere-se a uma especialidade médica distinta, e leva um
+certo tempo de atendimento para ser cumprida.
+
+Além disso, cada paciente possui uma faixa de horário ideal para atendimento;
+Atendimentos antes do horário de início são proibidos; Atendimentos extrapolando
+o horário de término são penalizados como atraso. São conhecidas as distâncias
+entre todos os locais do problema, incluindo-se a garagem.
+
+** Objetivo
+
+Segue o objetivo definido:
+
+#+begin_example
+Encontrar uma solução cuja a soma dos seguintes fatores seja mínima:
+- Distâncias percorridas pelos veículos;
+- Soma dos atrasos nos atendimentos;
+- Tempo do maior atraso observado na solução.
+#+end_example
+
+Sendo assim, a solução de uma instância seguirá o seguinte modelo:
+
+#+begin_example
+Para cada veículo, uma rota com a ordem de visitação dos pacientes.
+Para cada paciente, o horário que começa e encerra o atendimento de cada especialidade médica requisitada.
+#+end_example
+
+** Linguagem
+
+Para esse trabalho usaremos a linguagem de programação Julia, com sua interface
+=JuMP= para o /solver/ matemático =GLPK= e sua facilidades sintáticas para a
+implementação da meta-heurística.
+
+** Contato
+
+Você pode entrar em contato comigo pelo seguinte email:
+
+#+begin_example
+hcpsilva@inf.ufrgs.br
+#+end_example
