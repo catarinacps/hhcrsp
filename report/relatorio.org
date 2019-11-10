@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # -*- mode: org -*-
 
-#+title: *Metaheurística Simulated Annealing para o HHCRSP*
+#+title: *Metaheurística /Simulated Annealing/ para o HHCRSP*
 #+options: toc:nil author:nil
 #+tags: noexport(n) ignore(i)
 #+language: pt-br
@@ -26,11 +26,10 @@
 #+latex_header: \author{Victor dos Santos Melo}
 #+latex_header: \author{Henrique Corrêa Pereira da Silva}
 #+latex_header: \affil[1]{Instituto de Informática\\Universidade Federal do Rio Grande do Sul}
-#+latex_header: \affil[ ]{\normalsize\texttt{\{fcolombelli, glmiotto, hcpsilva\}@inf.ufrgs.br}}
+#+latex_header: \affil[ ]{\normalsize\texttt{\{fcolombelli, vsmelo, hcpsilva\}@inf.ufrgs.br}}
 
 #+latex_header: \setlength{\droptitle}{-1.2cm}
 #+latex_header: \usemintedstyle{manni}
-
 
 * Resumo                                                             :ignore:
 
