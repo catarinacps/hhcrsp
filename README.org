@@ -12,7 +12,9 @@ meta-heurística /Simulated Annealing/!
 ** Sumário                                                           :TOC_3:
   - [[#definição][Definição]]
   - [[#objetivo][Objetivo]]
-  - [[#linguagem][Linguagem]]
+  - [[#execução][Execução]]
+    - [[#execução-simples][Execução Simples]]
+    - [[#compilação][Compilação]]
   - [[#contato][Contato]]
 
 ** Definição
@@ -54,11 +56,50 @@ Para cada veículo, uma rota com a ordem de visitação dos pacientes.
 Para cada paciente, o horário que começa e encerra o atendimento de cada especialidade médica requisitada.
 #+end_example
 
-** Linguagem
+** Execução
 
-Para esse trabalho usaremos a linguagem de programação Julia, com sua interface
-=JuMP= para o /solver/ matemático =GLPK= e sua facilidades sintáticas para a
-implementação da meta-heurística.
+Para a execução do programa, você tem duas opções:
+
+- Utilizando a comum chamada a =julia=
+- Compilar e utilizar como executável
+
+*** Execução Simples
+
+Execute a seguinte chamada na linha de comando:
+
+#+begin_src bash :exports both :results output
+julia src/hhcrsp.jl --help
+#+end_src
+
+Essa chamada imprimirá na tela a utilização do programa e seus parâmetros
+opcionais de entrada.
+
+*** Compilação
+
+Para isso, execute uma simples chamada ao =make=:
+
+#+begin_src bash :exports both :results output
+make
+#+end_src
+
+*Atenção*: Para executar esse passo, é necessário ter instalado o pacote
+=PackageCompiler= de =julia=!
+
+Ao fim do processo, uma pasta chamada =build/= será criada no /root/ do
+repositório, com o executável compilado.
+
+Ao compilar o programa nós evitamos o longo tempo de compilação /JIT/ que
+=julia= realiza quando executa qualquer código fonte.
+
+Agora, realize os seguintes comandos:
+
+#+begin_src bash :exports both :results output
+cd build/
+
+./hhcrsp --help
+#+end_src
+
+Que obterás o mesmo resultado que executando estilo script.
 
 ** Contato
 
