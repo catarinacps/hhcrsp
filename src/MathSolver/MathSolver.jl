@@ -3,12 +3,10 @@ module MathSolver
 using JuMP
 using GLPK
 
-export math_solve
-
 # just an example
 # i still need to look into the parsing of a file and the passage of parameters
 # use ritt's example solutions!
-function math_solve(; verbose = false)
+function solve(; verbose = false)
     m = Model(with_optimizer(GLPK.Optimizer))
 
     @variable(m, x1 >= 0)
