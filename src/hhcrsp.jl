@@ -1,7 +1,7 @@
 #!/usr/bin/env julia
 
 include("./Utils/Instance.jl")
-include("./Utils/Utils.jl")
+include("./Utils/Parsing.jl")
 include("./MathSolver/MathSolver.jl")
 include("./SimulatedAnnealing/SimulatedAnnealing.jl")
 
