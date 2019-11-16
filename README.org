@@ -60,15 +60,19 @@ Para cada paciente, o horário que começa e encerra o atendimento de cada espec
 
 Para a execução do programa, você tem duas opções:
 
-- Utilizando a comum chamada a =julia=
-- Compilar e utilizar como executável
+1. Utilizando uma chamada comum a =julia=
+2. Compilar e utilizar como executável
 
 *** Execução Simples
 
-Execute a seguinte chamada na linha de comando:
+Execute qualquer uma das seguintes chamadas na linha de comando:
 
 #+begin_src bash :exports both :results output
 julia src/hhcrsp.jl --help
+
+# ou
+
+./src/hhcrsp.jl --help
 #+end_src
 
 Essa chamada imprimirá na tela a utilização do programa e seus parâmetros
