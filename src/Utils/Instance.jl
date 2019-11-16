@@ -24,7 +24,7 @@ struct ProblemInstance
     durations::Array{Float16, 3}
 end
 
-function Base.show([io::IO = stdout], inst::ProblemInstance)
+function Base.show(io::IO, inst::ProblemInstance)
     # loads of prints
 
     println(io, "an instance of the HHCRSP problem")
