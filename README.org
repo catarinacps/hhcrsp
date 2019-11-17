@@ -12,6 +12,7 @@ meta-heurística /Simulated Annealing/!
 ** Sumário                                                           :TOC_3:
   - [[#definição][Definição]]
   - [[#objetivo][Objetivo]]
+  - [[#estrutura-do-projeto][Estrutura do Projeto]]
   - [[#execução][Execução]]
     - [[#execução-simples][Execução Simples]]
     - [[#compilação][Compilação]]
@@ -54,6 +55,29 @@ Sendo assim, a solução de uma instância seguirá o seguinte modelo:
 #+begin_example
 Para cada veículo, uma rota com a ordem de visitação dos pacientes.
 Para cada paciente, o horário que começa e encerra o atendimento de cada especialidade médica requisitada.
+#+end_example
+
+** Estrutura do Projeto
+
+Segue a estrutura básica do projeto, comentada:
+
+#+begin_src bash :exports results :results output
+tree -nd
+#+end_src
+
+#+RESULTS:
+#+begin_example
+.                             # root do projeto
+├── build                     # pasta de build, caso seja utilizada a opção de make
+├── instances                 # pasta de dados, que guarda as instâncias
+├── labbook                   # pasta para o lab-book, guardando infos sobre os experimentos
+├── report                    # pasta para o relatório
+└── src                       # pasta para fontes, nela fica o script principal
+    ├── MathSolver            # módulo do solver matemático
+    ├── SimulatedAnnealing    # módulo da heurística simulated annealing
+    └── Utils                 # módulo para utilidades diversas
+
+8 directories
 #+end_example
 
 ** Execução
