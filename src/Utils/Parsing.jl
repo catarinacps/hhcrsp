@@ -1,9 +1,4 @@
-module Utils
-
 using ArgParse
-using ..Instance
-
-export parse_commandline, parse_instance
 
 function parse_commandline()
     s = ArgParseSettings(
@@ -155,5 +150,3 @@ function parse_instance(path_to_instance::String ; verbose = false)::ProblemInst
         end
     end
 end
-
-end # module

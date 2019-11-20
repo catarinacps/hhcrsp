@@ -1,7 +1,6 @@
 #!/usr/bin/env julia
 
-include("./Utils/Instance.jl")
-include("./Utils/Parsing.jl")
+include("./Utils/Utils.jl")
 include("./MathSolver/MathSolver.jl")
 include("./SimulatedAnnealing/SimulatedAnnealing.jl")
 
@@ -9,7 +8,6 @@ using ArgParse
 using .MathSolver
 using .SimulatedAnnealing
 using .Utils
-using .Instance
 
 Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
     parsed_args = parse_commandline()

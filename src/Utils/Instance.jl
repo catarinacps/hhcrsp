@@ -1,8 +1,4 @@
-module Instance
-
 import Base.show
-
-export ProblemInstance
 
 struct ProblemInstance
     # numeric quantities for bookkeeping
@@ -48,5 +44,3 @@ function Base.show(io::IO, inst::ProblemInstance)
         Base.print_matrix(io, inst.durations[i, :, :])
     end
 end
-
-end # module
