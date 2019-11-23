@@ -45,6 +45,7 @@ entre todos os locais do problema, incluindo-se a garagem.
 Consideramos o seguinte conjunto de dados como instância de entrada para o
 problema:
 
+#+begin_quote
 In the name of each instance =InstanzCplex_HCSRP_m_n.txt=, /m/ represents the
 number of nodes whereas /n/ represents the instance index for this size of
 problem, /n/ ranges between 1 and 10
@@ -66,6 +67,7 @@ problem, /n/ ranges between 1 and 10
 - =maxd= :: maximal time gap between service activities for double service patients
 - =e= :: beginning of time window
 - =l= :: end of time window
+#+end_quote
 
 *** Objetivo
 
