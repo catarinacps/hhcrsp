@@ -101,7 +101,7 @@ function parse_instance(path_to_instance::String ; verbose::Bool = false)::Probl
         if readline(file) == "a"
             possible_servi = zeros(Bool, num_vehi, num_servi)
             for row in 1:num_vehi
-                possible_servi[row, :] .= parse.(Bool, split(readline(file), "  "))
+                possible_servi[row, :] .= parse.(Bool, split(readline(file), " "))
             end
         else
             println(stderr, "Instance file is non-conformant...")

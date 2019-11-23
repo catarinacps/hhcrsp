@@ -40,7 +40,7 @@ function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSoluti
     verbose && println("A solucao otima e vender $(value(x1)) paes e ",
                        "$(value(x2)) baurus completos com um lucro total de $(objective_value(m)).")
 
-    return objective_value(m)
+    return ProblemSolution()
 end
 
 end # module

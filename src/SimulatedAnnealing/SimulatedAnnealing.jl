@@ -20,6 +20,8 @@ See also: [`parse_instance`](@ref)
 """
 function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSolution
     println("hi!")
+
+    return ProblemSolution()
 end
 
 end # module
