@@ -2,12 +2,26 @@ module MathSolver
 
 using JuMP
 using GLPK
-using ..Utils
+using ..Utils: ProblemInstance, ProblemSolution
 
 # just an example
 # i still need to look into the parsing of a file and the passage of parameters
 # use ritt's example solutions!
-function solve(instance::ProblemInstance ; verbose::Bool = false)
+
+"""
+    solve(instance[, verbose])
+
+Solves an instance of the HHCRSP problem utilizing the GLPK mathematical solver.
+Receives an `instance` instance of the problem, containing all initial system
+data, and can be verbose about its progress when given an `verbose` flag.
+
+# Arguments
+- `instance::ProblemInstance`: the instance to be solved
+- `verbose::Bool=false`: the verbosity flag
+
+See also: [`parse_instance`](@ref)
+"""
+function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSolution
     m = Model(with_optimizer(GLPK.Optimizer))
 
     @variable(m, x1 >= 0)

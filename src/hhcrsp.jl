@@ -11,24 +11,26 @@ using .MathSolver
 Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
     parsed_args = parse_commandline()
 
-    println("Parsed args:")
-    for (arg, value) in parsed_args
-        println("  $arg -> $value::$(typeof(value))")
+    instance = parse_instance(parsed_args["instance"])
+    verbose = parsed_args["verbose"]
+
+    if verbose
+        println("Parsed args:")
+        for (arg, value) in parsed_args
+            println("  $arg -> $value::$(typeof(value))")
+        end
     end
 
-    instance = parse_instance(parsed_args["instance"])
-    verbose_flag = parsed_args["verbose"]
-
-    verbose_flag && show(instance)
+    verbose && show(instance)
 
     if parsed_args["%COMMAND%"] == "math"
 
-        MathSolver.solve(instance, verbose = verbose_flag)
+        MathSolver.solve(instance, verbose = verbose)
 
         # do smth
     elseif parsed_args["%COMMAND%"] == "sa"
 
-        SimulatedAnnealing.solve(instance, verbose = verbose_flag)
+        SimulatedAnnealing.solve(instance, verbose = verbose)
 
         # do smth
     end

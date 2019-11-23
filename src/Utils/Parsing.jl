@@ -3,9 +3,7 @@ using ArgParse
 function parse_commandline()
     s = ArgParseSettings(
         "solve an instance of the HHCRSP problem using either a math solver or a heuristic",
-        commands_are_required = true,
-        version = "0.1",
-        add_version = true)
+        commands_are_required = true)
 
     @add_arg_table s begin
         "instance"
@@ -31,7 +29,7 @@ function parse_commandline()
         action = :command
 
         "--max-time", "-m"
-        help = "maximum time to let the solver run in seconds"
+        help = "maximum time to let the solver run (in seconds)"
         arg_type = Int32
         default = Int32(1200)
     end
