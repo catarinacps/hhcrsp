@@ -9,7 +9,7 @@ using .SimulatedAnnealing
 using .MathSolver
 
 Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
-    parsed_args = parse_commandline()
+    parsed_args = parse_commandline(ARGS)
 
     instance = parse_instance(parsed_args["instance"])
     verbose = parsed_args["verbose"]

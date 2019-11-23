@@ -1,6 +1,6 @@
 using ArgParse
 
-function parse_commandline()
+function parse_commandline(arguments_list::Vector{String})
     s = ArgParseSettings(
         "solve an instance of the HHCRSP problem using either a math solver or a heuristic",
         commands_are_required = true)
@@ -47,7 +47,7 @@ function parse_commandline()
         default = Float16(30.0)
     end
 
-    return parse_args(s)
+    return parse_args(arguments_list, s)
 end
 
 function parse_instance(path_to_instance::String ; verbose::Bool = false)::ProblemInstance
