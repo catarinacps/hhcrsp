@@ -1,8 +1,9 @@
 module SimulatedAnnealing
 
 # using SimpleWeightedGraphs
+using ..Utils
 
-function solve(; verbose::Bool = false)
+function solve(instance::ProblemInstance ; verbose::Bool = false)
     println("hi!")
 end
 

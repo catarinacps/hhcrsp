@@ -2,11 +2,12 @@ module MathSolver
 
 using JuMP
 using GLPK
+using ..Utils
 
 # just an example
 # i still need to look into the parsing of a file and the passage of parameters
 # use ritt's example solutions!
-function solve(; verbose::Bool = false)
+function solve(instance::ProblemInstance ; verbose::Bool = false)
     m = Model(with_optimizer(GLPK.Optimizer))
 
     @variable(m, x1 >= 0)

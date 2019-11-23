@@ -4,7 +4,7 @@ include("./Utils/Utils.jl")
 include("./SimulatedAnnealing/SimulatedAnnealing.jl")
 include("./MathSolver/MathSolver.jl")
 
-using .Utils: parse_commandline, parse_instance, ProblemInstance
+using .Utils: parse_commandline, parse_instance, ProblemInstance, ProblemSolution
 using .SimulatedAnnealing
 using .MathSolver
 
@@ -16,14 +16,19 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
         println("  $arg -> $value::$(typeof(value))")
     end
 
+    instance = parse_instance(parsed_args["instance"])
+    verbose_flag = parsed_args["verbose"]
+
+    verbose_flag && show(instance)
+
     if parsed_args["%COMMAND%"] == "math"
 
-        MathSolver.solve(verbose = parsed_args["verbose"])
+        MathSolver.solve(instance, verbose = verbose_flag)
 
         # do smth
     elseif parsed_args["%COMMAND%"] == "sa"
 
-        SimulatedAnnealing.solve(verbose = parsed_args["verbose"])
+        SimulatedAnnealing.solve(instance, verbose = verbose_flag)
 
         # do smth
     end

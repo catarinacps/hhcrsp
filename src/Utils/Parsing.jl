@@ -52,15 +52,13 @@ function parse_commandline()
     return parse_args(s)
 end
 
-function parse_instance(path_to_instance::String ; verbose = false)::ProblemInstance
+function parse_instance(path_to_instance::String ; verbose::Bool = false)::ProblemInstance
     if !isfile(path_to_instance)
         println(stderr, "Instance file not found...")
         exit(1)
     end
 
     verbose && println("Opening instance file!")
-
-    read_instance = ProblemInstance
 
     open(path_to_instance) do file
         if readline(file) == "nbNodes"
@@ -95,7 +93,8 @@ function parse_instance(path_to_instance::String ; verbose = false)::ProblemInst
         end
 
         if readline(file) == "DS"
-            # ?
+            # do we need to consider double service patients?
+            readline(file)
         else
             println(stderr, "Instance file is non-conformant...")
             exit(2)
@@ -104,7 +103,7 @@ function parse_instance(path_to_instance::String ; verbose = false)::ProblemInst
         if readline(file) == "a"
             possible_servi = zeros(Bool, num_vehi, num_servi)
             for row in 1:num_vehi
-                possible_servi[row, :] .= parse.(Bool, split(readline(file), " "))
+                possible_servi[row, :] .= parse.(Bool, split(readline(file), "  "))
             end
         else
             println(stderr, "Instance file is non-conformant...")
@@ -112,7 +111,7 @@ function parse_instance(path_to_instance::String ; verbose = false)::ProblemInst
         end
 
         if readline(file) == "x"
-            # ?
+            # why should we need the distance?
             readline(file)
         else
             println(stderr, "Instance file is non-conformant...")
@@ -120,7 +119,7 @@ function parse_instance(path_to_instance::String ; verbose = false)::ProblemInst
         end
 
         if readline(file) == "y"
-            # ?
+            # why should we need the distance?
             readline(file)
         else
             println(stderr, "Instance file is non-conformant...")
@@ -148,5 +147,45 @@ function parse_instance(path_to_instance::String ; verbose = false)::ProblemInst
             println(stderr, "Instance file is non-conformant...")
             exit(2)
         end
+
+        if readline(file) == "mind"
+            # do we need to consider double service patients?
+            readline(file)
+        else
+            println(stderr, "Instance file is non-conformant...")
+            exit(2)
+        end
+
+        if readline(file) == "maxd"
+            # do we need to consider double service patients?
+            readline(file)
+        else
+            println(stderr, "Instance file is non-conformant...")
+            exit(2)
+        end
+
+        if readline(file) == "e"
+            window = zeros(Int16, 2, num_nodes)
+            window[1, :] .= parse.(Int16, split(readline(file), " "))
+        else
+            println(stderr, "Instance file is non-conformant...")
+            exit(2)
+        end
+
+        if readline(file) == "l"
+            window[2, :] .= parse.(Int16, split(readline(file), " "))
+        else
+            println(stderr, "Instance file is non-conformant...")
+            exit(2)
+        end
+
+        return ProblemInstance(num_nodes,
+                               num_vehi,
+                               num_servi,
+                               requisitions,
+                               possible_servi,
+                               dists,
+                               times,
+                               window)
     end
 end
