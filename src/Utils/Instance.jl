@@ -20,6 +20,10 @@ struct ProblemInstance
     durations::Array{Float16, 3}
 end
 
+struct ProblemSolution
+    #
+end
+
 function Base.show(io::IO, inst::ProblemInstance)
     # loads of prints
 

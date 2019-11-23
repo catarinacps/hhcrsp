@@ -11,7 +11,8 @@ meta-heurística /Simulated Annealing/!
 
 ** Sumário                                                           :TOC_3:
   - [[#definição][Definição]]
-  - [[#objetivo][Objetivo]]
+    - [[#instância][Instância]]
+    - [[#objetivo][Objetivo]]
   - [[#estrutura-do-projeto][Estrutura do Projeto]]
   - [[#execução][Execução]]
     - [[#execução-simples][Execução Simples]]
@@ -39,7 +40,36 @@ Atendimentos antes do horário de início são proibidos; Atendimentos extrapola
 o horário de término são penalizados como atraso. São conhecidas as distâncias
 entre todos os locais do problema, incluindo-se a garagem.
 
-** Objetivo
+*** Instância
+
+Consideramos o seguinte conjunto de dados como instância de entrada para o
+problema:
+
+#+begin_src org :exports both
+In the name of each instance =InstanzCplex_HCSRP_m_n.txt=, /m/ represents the
+number of nodes whereas /n/ represents the instance index for this size of
+problem, /n/ ranges between 1 and 10
+
+- =nbNodes= :: number of nodes in the network; note that the depot is counted as
+               the first (1) and the last node (=ndNodes=), i. e. for =nbNodes=
+               = 12 nodes, node 1 and 12 are depot nodes and nodes 2..11
+               represent the patients
+- =nbVehi= :: number of staff members (vehicles)
+- =nbServi= :: number of service types
+- =r= :: service requirement of each patient
+- =DS= :: patients, who require double service
+- =a= :: qualification of staff members
+- =x= :: x-coordinates of the nodes
+- =y= :: y-coordinates of the nodes
+- =d= :: distance matrix
+- =p= :: processing time of each service at each patient provided by each staff member
+- =mind= :: minimal time gap between service activities for double service patients
+- =maxd= :: maximal time gap between service activities for double service patients
+- =e= :: beginning of time window
+- =l= :: end of time window
+#+end_src
+
+*** Objetivo
 
 Segue o objetivo definido:
 
