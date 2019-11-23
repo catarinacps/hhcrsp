@@ -13,7 +13,7 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
 
     println("Parsed args:")
     for (arg, value) in parsed_args
-        println("  $arg -> $value")
+        println("  $arg -> $value::$(typeof(value))")
     end
 
     if parsed_args["%COMMAND%"] == "math"

@@ -6,7 +6,7 @@ using GLPK
 # just an example
 # i still need to look into the parsing of a file and the passage of parameters
 # use ritt's example solutions!
-function solve(; verbose = false)
+function solve(; verbose::Bool = false)
     m = Model(with_optimizer(GLPK.Optimizer))
 
     @variable(m, x1 >= 0)
@@ -22,8 +22,8 @@ function solve(; verbose = false)
 
     optimize!(m)
 
-    verbose && println("A solucao otima e vender $(value(x1)) paes e
-    $(value(x2)) baurus completos com um lucro total de $(objective_value(m)).")
+    verbose && println("A solucao otima e vender $(value(x1)) paes e ",
+                       "$(value(x2)) baurus completos com um lucro total de $(objective_value(m)).")
 
     return objective_value(m)
 end

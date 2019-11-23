@@ -2,7 +2,7 @@ module SimulatedAnnealing
 
 # using SimpleWeightedGraphs
 
-function solve(; verbose = false)
+function solve(; verbose::Bool = false)
     println("hi!")
 end
 
