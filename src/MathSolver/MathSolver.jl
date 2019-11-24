@@ -26,7 +26,7 @@ function solve(instance::ProblemInstance,
                time_limit::Int32
                ; verbose::Bool = false)::ProblemSolution
     # we'll be using GLPK here, as it's free
-    model = Model(with_optimizer(GLPK.Optimizer, TimeLimit = time_limit))
+    model = Model(with_optimizer(GLPK.Optimizer, tm_lim = time_limit))
 
     # binary variable
     # defines if vehicle v moves from i to j to provide service s
@@ -35,8 +35,8 @@ function solve(instance::ProblemInstance,
               x[1:instance.number_locations,
                 1:instance.number_locations,
                 1:instance.number_vehicles,
-                1:instance.number_services]) #,
-              # binary = true)
+                1:instance.number_services],
+              binary = true)
 
     # linear variable
     # defines the start time of service s provided by vehicle v on i
@@ -51,6 +51,11 @@ function solve(instance::ProblemInstance,
     @variable(model,
               z[1:instance.number_locations,
                 1:instance.number_services] >= 0)
+
+    # performance measures
+    @variable(model, D >= 0)
+    @variable(model, T >= 0)
+    @variable(model, T_max >= 0)
 
     # objective function
     # according to the lambda values, try to minimize restrictions 2, 3 and 4
@@ -80,14 +85,18 @@ function solve(instance::ProblemInstance,
                         s in 1:instance.number_services],
                 T_max >= z[i, s])
 
-    # constraint (5)
-    # guarantee that we'll start and end at the office
+    # constraint (5.1)
+    # guarantee that we'll start at the office
     @constraint(model, [v in 1:instance.number_vehicles],
-                sum(x[0, j, v, s] for
+                sum(x[1, j, v, s] for
                     j in 1:instance.number_locations,
                     v in 1:instance.number_vehicles,
-                    s in 1:instance.number_services) ==
-                sum(x[i, 0, v, s] for
+                    s in 1:instance.number_services) == 1)
+
+    # constraint (5.2)
+    # guarantee that we'll end at the office
+    @constraint(model, [v in 1:instance.number_vehicles],
+                sum(x[i, instance.number_locations, v, s] for
                     i in 1:instance.number_locations,
                     v in 1:instance.number_vehicles,
                     s in 1:instance.number_services) == 1)
@@ -113,7 +122,13 @@ function solve(instance::ProblemInstance,
 
     # constraint (8)
     #
-    @constraint(model)
+    @constraint(model, [i in 1:instance.number_locations,
+                        j in 2:(instance.number_locations - 1),
+                        v in 1:instance.number_vehicles,
+                        s1 in 1:instance.number_services,
+                        s2 in 1:instance.number_services],
+                t[i, v, s1] + instance.processing_times[i, v, s1] + instance.distances[i, j] <=
+                t[j, v, s2] + (1 - x[i, j, v, s2]))
 
     # constraint (9)
     # compliance with the start time
@@ -132,21 +147,17 @@ function solve(instance::ProblemInstance,
     # domain (13)
     # garantees that x is binary and only 1 when we are qualified and required
     # to provide said service
-    @constraint(model, [i, j in 1:instance.number_locations,
+    @constraint(model, [i in 1:instance.number_locations,
+                        j in 1:instance.number_locations,
                         v in 1:instance.number_vehicles,
                         s in 1:instance.number_services],
-                x[i, j, v, s] in [1, instance.qualifications[v, s] * instance.requirements[j, s]])
+                x[i, j, v, s] <= instance.qualifications[v, s] * instance.requirements[j, s])
 
-    # @constraints(m, begin
-    #              0.1*x1+0.1*x2 <= 200
-    #              0.125*x2 <= 800
-    #              2*x1+3*x2 <= 5*40*60
-    #              end)
+    JuMP.optimize!(model)
 
-    # optimize!(m)
-
-    # verbose && println("A solucao otima e vender $(value(x1)) paes e ",
-    #                    "$(value(x2)) baurus completos com um lucro total de $(objective_value(m)).")
+    if verbose
+        println("Objective is: ", JuMP.objective_value(model))
+    end
 
     return ProblemSolution()
 end
