@@ -25,7 +25,9 @@ struct ProblemInstance
 end
 
 struct ProblemSolution
-    #
+    
+    ps::Int64
+
 end
 
 function Base.show(io::IO, inst::ProblemInstance)
