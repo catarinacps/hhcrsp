@@ -9,7 +9,7 @@ using ..Utils: ProblemInstance, ProblemSolution
 Solves an instance of the HHCRSP problem utilizing the Simulated Annealing
 heuristic.
 
-The algorithm here implemented is based on the Simulated Annealing proposed by Downsland (1995, p.26).
+The algorithm here implemented is based on the Simulated Annealing proposed by Dowsland (1995, p.26).
 
 Receives an `instance` instance of the problem, containing all initial system
 data, and can be verbose about its progress when given an `verbose` flag.
@@ -23,8 +23,10 @@ See also: [`parse_instance`](@ref)
 function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSolution
     
     # Parameters (i'll just leave 'em here cause idk what to do)
-    T = 1 #what should i use? =>wsiu
-    cooling_factor = 1 #wsiu
+    # what should i use? => wsiu
+    
+    T::Float32 = 100.0 
+    cooling_factor::Float32 = 0.9 #wsiu
     s0 = generate_initial_solution(instance)
     s0_score = compute_score(s0)
     max_outer_iterations = 10  #wsiu
@@ -53,7 +55,7 @@ function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSoluti
             end
 
         end
-        T = update_temperature(T)
+        T = update_temperature(T, cooling_factor)
     end
 
 
@@ -82,10 +84,12 @@ function generate_neighbor(solution::ProblemSolution)::ProblemSolution
 
 end
 
-#TODO
-function update_temperature(temperature)::Float32
-
-    return temperature + 2
+function update_temperature(temperature::Float32, cooling_factor::Float32)::Float32
+    # The following implementation is based on the handout of the course,
+    # but this is the simplest way to reduce the temperature.
+    # On Goldberg et. al. (2016, p. 111) there are several other sophisticated 
+    # ways of doing that.
+    return temperature * cooling_factor
 
 end
 
