@@ -24,8 +24,15 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
     verbose && show(instance)
 
     if parsed_args["%COMMAND%"] == "math"
+        # gather either defined or default values
+        lambdas = parsed_args["lambda"]
+        max_time = parsed_args["max-time"]
 
-        MathSolver.solve(instance, verbose = verbose)
+        # call the solver with said values
+        MathSolver.solve(instance,
+                         lambdas,
+                         max_time,
+                         verbose = verbose)
 
         # do smth
     elseif parsed_args["%COMMAND%"] == "sa"

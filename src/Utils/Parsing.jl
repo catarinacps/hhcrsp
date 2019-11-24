@@ -18,7 +18,7 @@ function parse_commandline(arguments_list::Vector{String})
         "--seed", "-s"
         help = "seed to be used in pseudo random number generation"
         arg_type = Int16
-        default = rand(Int16)
+        default = abs(rand(Int16))
 
         "--lambda", "-l"
         help = "lambda preference values to objective function"
