@@ -25,8 +25,8 @@ function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSoluti
     # Parameters (i'll just leave 'em here cause idk what to do)
     # what should i use? => wsiu
     
-    T::Float32 = 100.0 
-    cooling_factor::Float32 = 0.9 #wsiu
+    T::Float32 = 100.0 #wsiu
+    cooling_factor::Float32 = 0.9
     s0 = generate_initial_solution(instance)
     s0_score = compute_score(s0)
     max_outer_iterations = 10  #wsiu
@@ -66,8 +66,21 @@ end
 #TODO
 function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
 
-    
+    #TODO
+    # sort the patients by end time window
 
+    Base.print_matrix(stdout, instance.requirements)
+    println("\n\n")
+    Base.print_matrix(stdout, instance.qualifications)
+    for patient in 1:instance.number_locations
+        
+        s = instance.requirements
+        println("\n\npatient: ", patient)
+
+    end
+
+    println("\n\n\n")
+    throw("stop! debugging...")
 
     return ProblemSolution( Array{Int16,2}(undef, 3, 7),
                             Array{Int16,2}(undef, 3, 7))
