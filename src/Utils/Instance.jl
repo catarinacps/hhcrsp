@@ -25,33 +25,29 @@ struct ProblemInstance
 end
 
 struct ProblemSolution
-    
-
     solution_matrix::Array{Int16, 2}
     """
-        solution_matrix is an array (2d) containing the problem solution 
+        solution_matrix is an array (2d) containing the problem solution
         (rows: qualifications; columns: patients)
-        
+
         solution_matrix example
         - 3 qualifications
         - 7 patients
 
         qual/pat  |  1  | 2  |  3  |  4  |  5  |  6  |  7 |
         ----------|-----|----|-----|-----|-----|-----|----|
-            1     |  7  | 4  |     |     |     |  5  |    |    
+            1     |  7  | 4  |     |     |     |  5  |    |
         ----------|-----|----|-----|-----|-----|-----|----|
             2     |     |    |  2  |     |     |     |  1 |
         ----------|-----|----|-----|-----|-----|-----|----|
             3     |     |    |     |  3  |  6  |     |    |
         ----------|-----|----|-----|-----|-----|-----|----|
 
-        In this solution_matrix: 
+        In this solution_matrix:
         - the first vehicle attends patients 7, 4 and 5
         - the second vehicle attends patients 2 and 1
         - the third vehicle attends patients 3 and 6
-
     """
-
 
     service_start_times::Array{Int16, 2}
     """
@@ -63,27 +59,24 @@ struct ProblemSolution
 
              pat  |  1  | 2  |  3  |  4  |  5  |  6  |  7 |
         ----------|-----|----|-----|-----|-----|-----|----|
-          i(s)    | 7(1)|4(1)| 2(2)| 3(3)| 6(3)| 5(1)|7(2)| 
+          i(s)    | 7(1)|4(1)| 2(2)| 3(3)| 6(3)| 5(1)|7(2)|
         ----------|-----|----|-----|-----|-----|-----|----|
-        t(i,1,s)  | 23  |84  |     |     |     |112  |    |    
+        t(i,1,s)  | 23  |84  |     |     |     |112  |    |
         ----------|-----|----|-----|-----|-----|-----|----|
         t(i,2,s)  |     |    | 82  |     |     |     |124 |
         ----------|-----|----|-----|-----|-----|-----|----|
         t(i,3,s)  |     |    |     | 15  |107  |     |    |
         ----------|-----|----|-----|-----|-----|-----|----|
 
-        
         t(i,v,s) is calculated as follows:
 
         t(i,v,s) = max( e(i), b(i,v) )
             - e(i): begin time window of patient i
             - b(i,v): t(k,v,s) +  p(k,s) + d(k,i)
-                - p(k,s): processing time of service s at patient k 
+                - p(k,s): processing time of service s at patient k
                 - d(k,i): traveling distance between k and i
 
     """
-
-
 end
 
 function Base.show(io::IO, inst::ProblemInstance)

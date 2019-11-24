@@ -4,12 +4,8 @@ using JuMP
 using GLPK
 using ..Utils: ProblemInstance, ProblemSolution
 
-# just an example
-# i still need to look into the parsing of a file and the passage of parameters
-# use ritt's example solutions!
-
 """
-    solve(instance[, verbose])
+    solve(instance, lambdas, time_limit[, verbose])
 
 Solves an instance of the HHCRSP problem utilizing the GLPK mathematical solver.
 Receives an `instance` instance of the problem, containing all initial system
@@ -17,6 +13,8 @@ data, and can be verbose about its progress when given an `verbose` flag.
 
 # Arguments
 - `instance::ProblemInstance`: the instance to be solved
+- `lambdas::Array{Float16}`: weights to the objective function performance measure
+- `time_limit::Int32`: time limit to the solver
 - `verbose::Bool=false`: the verbosity flag
 
 See also: [`parse_instance`](@ref)
@@ -159,7 +157,7 @@ function solve(instance::ProblemInstance,
         println("Objective is: ", JuMP.objective_value(model))
     end
 
-    return ProblemSolution()
+    return ProblemSolution(zeros(Int16, 1, 1), zeros(Int16, 1, 1))
 end
 
 end # module

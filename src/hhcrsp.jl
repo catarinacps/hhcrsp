@@ -2,11 +2,11 @@
 
 include("./Utils/Utils.jl")
 include("./SimulatedAnnealing/SimulatedAnnealing.jl")
-#include("./MathSolver/MathSolver.jl")
+include("./MathSolver/MathSolver.jl")
 
 using .Utils: parse_commandline, parse_instance, ProblemInstance, ProblemSolution
 using .SimulatedAnnealing
-#using .MathSolver
+using .MathSolver
 
 Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
     parsed_args = parse_commandline(ARGS)
@@ -29,12 +29,12 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
         max_time = parsed_args["max-time"]
 
         # call the solver with said values
-        
+
         MathSolver.solve(instance,
                          lambdas,
                          max_time,
                          verbose = verbose)
-        
+
         # do smth
     elseif parsed_args["%COMMAND%"] == "sa"
 
