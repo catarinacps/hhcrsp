@@ -20,12 +20,11 @@ function parse_commandline(arguments_list::Vector{String})
         arg_type = Int16
         default = rand(Int16)
 
-        "--lambdas", "-l"
-        help = "lambda values to objective function (i.e. preferences)"
+        "--lambda", "-l"
+        help = "lambda preference values to objective function"
         nargs = 3
-        action = :store_arg
         arg_type = Float16
-        default = [Float16(0.33), Float16(0.33), Float16(0.33)]
+        default = [Float16(1/3), Float16(1/3), Float16(1/3)]
     end
 
     add_arg_group(s, "math solver (GLPK)")
@@ -50,7 +49,7 @@ function parse_commandline(arguments_list::Vector{String})
 
         "--temperature", "-t"
         help = "initial temperature for simulated annealing"
-        arg_type
+        arg_type = Float16
         default = Float16(30.0)
     end
 
