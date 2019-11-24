@@ -59,28 +59,33 @@ function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSoluti
     end
 
 
-    return ProblemSolution(1)
+    return s0
 end
 
 
 #TODO
 function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
 
-    return ProblemSolution(42)
+    
+
+
+    return ProblemSolution( Array{Int16,2}(undef, 3, 7),
+                            Array{Int16,2}(undef, 3, 7))
 
 end
 
 #TODO
 function compute_score(solution::ProblemSolution)::Float32
 
-    return 42.0 + solution.ps
+    return 42.0 + solution.solution_matrix[1]
 
 end
 
 #TODO
 function generate_neighbor(solution::ProblemSolution)::ProblemSolution
 
-    return ProblemSolution(solution.ps + 1)
+    return ProblemSolution( Array{Int16,2}(undef, 3, 7),
+                            Array{Int16,2}(undef, 3, 7))
 
 end
 
