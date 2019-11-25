@@ -27,17 +27,22 @@ function parse_commandline(arguments_list::Vector{String})
         default = [Float16(1/3), Float16(1/3), Float16(1/3)]
     end
 
-    add_arg_group(s, "math solver (GLPK)")
+    add_arg_group(s, "math solver (JuMP)")
 
     @add_arg_table s begin
         "math"
-        help = "solve using the GLPK solver"
+        help = "model using JuMP"
         action = :command
 
         "--max-time", "-m"
         help = "maximum time to let the solver run (in seconds)"
         arg_type = Int32
-        default = Int32(1200)
+        default = Int32(300)
+
+        "--output", "-o"
+        help = "path of the output model filename"
+        arg_type = String
+        default = "./model.lp"
     end
 
     add_arg_group(s, "simulated annealing")

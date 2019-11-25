@@ -27,15 +27,18 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
         # gather either defined or default values
         lambdas = parsed_args["lambda"]
         max_time = parsed_args["max-time"]
+        output = parsed_args["output"]
 
         # call the solver with said values
 
-        MathSolver.solve(instance,
-                         lambdas,
-                         max_time,
-                         verbose = verbose)
+        ret = MathSolver.solve(instance,
+                               lambdas,
+                               max_time,
+                               output,
+                               verbose = verbose)
 
-        # do smth
+        ret && verbose && println("Success modeling!")
+
     elseif parsed_args["%COMMAND%"] == "sa"
 
         SimulatedAnnealing.solve(instance, verbose = verbose)

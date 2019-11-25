@@ -8,7 +8,7 @@ using ..Utils: ProblemInstance, ProblemSolution
 """
     solve(instance, lambdas, time_limit[, verbose])
 
-Solves an instance of the HHCRSP problem utilizing the GLPK mathematical solver.
+Models an instance of the HHCRSP problem utilizing the JuMP interface.
 Receives an `instance` instance of the problem, containing all initial system
 data, and can be verbose about its progress when given an `verbose` flag.
 
@@ -22,10 +22,13 @@ See also: [`parse_instance`](@ref)
 """
 function solve(instance::ProblemInstance,
                lambdas::Array{Float16},
-               time_limit::Int32
-               ; verbose::Bool = false)::ProblemSolution
+               time_limit::Int32,
+               output::String
+               ; verbose::Bool = false)::Bool
     # we'll be using GLPK here, as it's free
-    model = Model(with_optimizer(Cbc.Optimizer, seconds = time_limit))
+    model = Model(with_optimizer(Cbc.Optimizer,
+                                 seconds = time_limit,
+                                 threads = Threads.nthreads()))
 
     # all problem sets
     C0 = 1:(instance.number_locations - 1)
@@ -138,17 +141,17 @@ function solve(instance::ProblemInstance,
 
     MOI.copy_to(lp_model, backend(model))
 
-    MOI.write_to_file(lp_model, "modelo.lp")
+    MOI.write_to_file(lp_model, output)
 
     # JuMP.optimize!(model)
+
+    # not worth solving inside julia
 
     # if verbose
     #     println("Objective is: ", JuMP.objective_value(model))
     # end
 
-    return ProblemSolution(Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}(),
-                           Array{Pair{Int16, Int16}}(undef, 1, 1),
-                           zeros(Int16, 1, 1))
+    return true
 end
 
 end # module
