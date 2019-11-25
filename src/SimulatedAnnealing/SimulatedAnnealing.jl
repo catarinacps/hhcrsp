@@ -57,25 +57,76 @@ function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSoluti
 end
 
 
-#TODO
+
 function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
-    #TODO
-    # sort the patients by end time window
-
-    Base.print_matrix(stdout, instance.requirements)
-    print("\n\n")
-    Base.print_matrix(stdout, instance.qualifications)
-
-    for patient in 1:instance.number_locations
-        s = instance.requirements
-        print("\n\npatient: ", patient)
+    
+    patient_service_list = generate_patient_service_list(instance)
+    patient_service_list = sort_patients_by_ending_time(patient_service_list)
+    solution_dict = Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}()
+    
+    x = length(patient_service_list)
+    y = instance.number_vehicles
+    
+    o_matrix = Array{Any,2}(undef, y, x)
+    fill!(o_matrix, -1=>-1)
+    
+    for (index, patient_service) in enumerate(patient_service_list)
+            
+            vehicle = get_vehicle(patient_service.second, instance)
+            o_matrix[vehicle, index] = patient_service
+            merge!(solution_dict, Dict((patient_service) => (vehicle => index)))
     end
-
-    print("\n\n\n")
-    throw("stop! debugging...")
-
-    return ProblemSolution(zeros(Int16, 3, 7), zeros(Int16, 3, 7))
+    
+    #TODO
+    # COMPUTE STARTING TIME MATRIX
+    
+    return #TODO
 end
+
+
+function generate_patient_service_list(instance::ProblemInstance)
+    
+    patient_service_list = []
+    
+    # The first and last requirements are ignored because they are not patients
+    for patient in 2:instance.number_locations-1
+        
+        patient_requirements = instance.requirements[patient, :]
+        for (index, requirement) in enumerate(patient_requirements)
+            
+            if requirement
+                push!(patient_service_list, patient=>index)
+            end
+        end
+    end
+        
+    return patient_service_list
+end
+
+
+#TODO
+function sort_patients_by_ending_time(patient_service_list)
+    
+    return patient_service_list
+
+end
+
+
+function get_vehicle(service, instance)
+   
+    possible_vehicles = []
+    for vehicle in 1:instance.number_vehicles
+        
+        vehicle_qualifications = instance.qualifications[vehicle, :]
+        if vehicle_qualifications[service] == 1
+            push!(possible_vehicles, vehicle)
+        end
+        
+    end
+    
+    return rand(possible_vehicles)
+end
+
 
 #TODO
 function compute_score(solution::ProblemSolution)::Float32
