@@ -1,7 +1,8 @@
 module MathSolver
 
 using JuMP
-using GLPK
+using Cbc
+using MathOptFormat
 using ..Utils: ProblemInstance, ProblemSolution
 
 """
@@ -24,13 +25,15 @@ function solve(instance::ProblemInstance,
                time_limit::Int32
                ; verbose::Bool = false)::ProblemSolution
     # we'll be using GLPK here, as it's free
-    model = Model(with_optimizer(GLPK.Optimizer, tm_lim = time_limit))
+    model = Model(with_optimizer(Cbc.Optimizer, seconds = time_limit))
 
     # all problem sets
-    C0 = 1:instance.number_locations
-    C = 2:(instance.number_locations - 1)
+    C0 = 1:(instance.number_locations - 1)
+    C = 2:(instance.number_locations - 2)
     S = 1:instance.number_services
     V = 1:instance.number_vehicles
+
+    # println(C0)
 
     # all problem instance data
     d = instance.distances
@@ -40,8 +43,7 @@ function solve(instance::ProblemInstance,
     w = instance.time_windows
 
     # garage (office) indexes
-    g1 = 1
-    g2 = instance.number_locations
+    g = 1
 
     # binary variable
     # defines if vehicle v moves from i to j to provide service s
@@ -86,13 +88,13 @@ function solve(instance::ProblemInstance,
     # constraint (5.1)
     # guarantee that we'll start at the office
     @constraint(model, [v in V],
-                sum(x[g1, j, v, s] for j in C0, v in V, s in S)
+                sum(x[g, j, v, s] for j in C0, s in S)
                 == 1)
 
     # constraint (5.2)
     # guarantee that we'll end at the office
     @constraint(model, [v in V],
-                sum(x[i, g2, v, s] for i in C0, v in V, s in S)
+                sum(x[i, g, v, s] for i in C0, s in S)
                 == 1)
 
     # constraint (6)
@@ -105,7 +107,7 @@ function solve(instance::ProblemInstance,
     # constraint (7)
     # defines that every service will be conducted by one qualified caregiver
     @constraint(model, [i in C, s in S],
-                sum(a[v, s] * x[j, i, v, s] for j in C0, v in V)
+                sum(a[v, s] * x[j, i, v, s] for j in C0, v in V if i != j)
                 == r[i, s])
 
     # constraint (8)
@@ -114,7 +116,7 @@ function solve(instance::ProblemInstance,
     @constraint(model, [i in C0, j in C, v in V, s1 in S, s2 in S],
                 t[i, v, s1] + p[i, v, s1] + d[i, j]
                 <=
-                t[j, v, s2] + (1 - x[i, j, v, s2]))
+                t[j, v, s2] + 1e6 * (1 - x[i, j, v, s2]))
 
     # constraint (9)
     # compliance with the start time
@@ -132,11 +134,17 @@ function solve(instance::ProblemInstance,
     @constraint(model, [i in C0, j in C0, v in V, s in S],
                 x[i, j, v, s] <= a[v, s] * r[j, s])
 
-    JuMP.optimize!(model)
+    lp_model = MathOptFormat.LP.Model()
 
-    if verbose
-        println("Objective is: ", JuMP.objective_value(model))
-    end
+    MOI.copy_to(lp_model, backend(model))
+
+    MOI.write_to_file(lp_model, "modelo.lp")
+
+    # JuMP.optimize!(model)
+
+    # if verbose
+    #     println("Objective is: ", JuMP.objective_value(model))
+    # end
 
     return ProblemSolution(Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}(),
                            Array{Pair{Int16, Int16}}(undef, 1, 1),
