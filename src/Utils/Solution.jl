@@ -1,15 +1,3 @@
-import Random: AbstractRNG, rand
-
-function rand(rng::AbstractRNG, d::Dict)
-    isempty(d) && throw(ArgumentError("dictionary must be non-empty"))
-    n = length(d.keys)
-    while true
-        i = rand(rng, 1:n)
-        !isdefined(d.keys, i) && continue
-        return d.keys[i], d.vals[i]
-    end
-end
-
 """
     ProblemSolution(Dict, Array, Array)
 
@@ -65,9 +53,45 @@ end
 struct ProblemSolution
     # dictionary containing:
     # (patient, service) => (x, y)
-    solution_dict::Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}
+    indexes::Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}
 
-    solution_matrix::Array{Int16, 2}
+    o::Array{Pair{Int16, Int16}, 2}
 
-    service_start_times::Array{Int16, 2}
+    t::Array{Int16, 2}
+end
+
+struct DecisionVariables
+    x::Array{Bool, 4}
+    t::Array{Float16, 3}
+    z::Array{Float16, 2}
+end
+
+function solution_to_variables(solution::ProblemSolution,
+                               instance::ProblemInstance)::DecisionVariables
+    vars = DecisionVariables(zeros(Bool,
+                                   instance.number_locations,
+                                   instance.number_locations,
+                                   instance.number_vehicles,
+                                   instance.number_services),
+                             zeros(Float16,
+                                   instance.number_locations,
+                                   instance.number_vehicles,
+                                   instance.number_services)
+                             zeros(Float16,
+                                   instance.number_locations,
+                                   instance.number_services))
+
+    for (vehicle, visits) in enumerate(eachrow(solution.o))
+        visits = visits[visits .> Pair(-1, -1)]
+
+        last_location = 0
+        for (patient, service) in visits
+            vars.x[last_location, patient, vehicle, visits] = true
+            last_location = patient
+        end
+    end
+
+    vars.t = copy(solution.t)
+
+    return vars
 end

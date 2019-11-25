@@ -129,7 +129,7 @@ end
 
 
 #TODO
-function compute_score(solution::ProblemSolution)::Float32
+function compute_score(solution::ProblemSolution, lambdas::Array{Float16})::Float32
     return 42.0 + solution.solution_matrix[1]
 end
 
