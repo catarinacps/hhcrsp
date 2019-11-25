@@ -105,9 +105,8 @@ function solve(instance::ProblemInstance,
     # constraint (7)
     # defines that every service will be conducted by one qualified caregiver
     @constraint(model, [i in C, s in S],
-                sum(a[v, s] * x[j, i, v, s] for
-                    j in C0,
-                    v in V) == r[i, s])
+                sum(a[v, s] * x[j, i, v, s] for j in C0, v in V)
+                == r[i, s])
 
     # constraint (8)
     # determines the start times of services in respect to durations and
