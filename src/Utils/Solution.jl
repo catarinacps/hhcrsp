@@ -1,15 +1,3 @@
-import Random: AbstractRNG, rand
-
-function rand(rng::AbstractRNG, d::Dict)
-    isempty(d) && throw(ArgumentError("dictionary must be non-empty"))
-    n = length(d.keys)
-    while true
-        i = rand(rng, 1:n)
-        !isdefined(d.keys, i) && continue
-        return d.keys[i], d.vals[i]
-    end
-end
-
 """
     ProblemSolution(Dict, Array, Array)
 
