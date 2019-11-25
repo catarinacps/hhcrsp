@@ -76,7 +76,7 @@ function solution_to_variables(solution::ProblemSolution,
                              zeros(Float16,
                                    instance.number_locations,
                                    instance.number_vehicles,
-                                   instance.number_services)
+                                   instance.number_services),
                              zeros(Float16,
                                    instance.number_locations,
                                    instance.number_services))

@@ -138,7 +138,9 @@ function solve(instance::ProblemInstance,
         println("Objective is: ", JuMP.objective_value(model))
     end
 
-    return ProblemSolution(zeros(Int16, 1, 1), zeros(Int16, 1, 1))
+    return ProblemSolution(Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}(),
+                           Array{Pair{Int16, Int16}}(undef, 1, 1),
+                           zeros(Int16, 1, 1))
 end
 
 end # module
