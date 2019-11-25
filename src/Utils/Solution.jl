@@ -84,11 +84,14 @@ function solution_to_variables(solution::ProblemSolution,
     for (vehicle, visits) in enumerate(eachrow(solution.o))
         visits = visits[visits .> Pair(-1, -1)]
 
-        last_location = 0
+        last_location = 1 # we start at the garage
         for (patient, service) in visits
-            vars.x[last_location, patient, vehicle, visits] = true
+            vars.x[last_location, patient, vehicle, service] = true
             last_location = patient
         end
+
+        # and end at the garage
+        vars.x[last_location, instance.number_locations, vehicle, 1] = true
     end
 
     vars.t = copy(solution.t)
