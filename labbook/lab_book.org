@@ -64,12 +64,7 @@ suppressMessages(library(tidyverse))
 suppressMessages(library(DoE.base))
 
 ins = c("CPLEX_HCSRP_10_3",
-        "CPLEX_HCSRP_25_3",
-        "CPLEX_HCSRP_25_9",
-        "CPLEX_HCSRP_50_1",
-        "CPLEX_HCSRP_50_2",
-        "CPLEX_HCSRP_50_6",
-        "CPLEX_HCSRP_75_10")
+        "CPLEX_HCSRP_25_9")
 dummy = c(1, 2)
 
 fac.design(nfactors=2,
@@ -89,7 +84,7 @@ fac.design(nfactors=2,
 
 #+RESULTS:
 :
-: creating full factorial with 14 runs ...
+: creating full factorial with 4 runs ...
 
 ** Script
 
