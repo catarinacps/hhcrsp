@@ -40,8 +40,9 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
         ret && verbose && println("Success modeling!")
 
     elseif parsed_args["%COMMAND%"] == "sa"
-
-        SimulatedAnnealing.solve(instance, verbose = verbose)
+        # gather either defined or default values
+        lambdas = parsed_args["lambda"]
+        SimulatedAnnealing.solve(instance, lambdas, verbose = verbose)
 
         # do smth
     end

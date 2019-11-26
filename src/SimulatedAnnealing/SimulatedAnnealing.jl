@@ -26,21 +26,21 @@ data, and can be verbose about its progress when given an `verbose` flag.
 
 See also: [`parse_instance`](@ref)
 """
-function solve(instance::ProblemInstance ; verbose::Bool = false)::ProblemSolution
+function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Bool = false)::ProblemSolution
     # Parameters (i'll just leave 'em here cause idk what to do)
     # what should i use? => wsiu
 
     T = 100.0 #wsiu
     cooling_factor = 0.9
     s0 = generate_initial_solution(instance)
-    s0_score = compute_score(s0)
+    s0_score = compute_score(instance, s0, lambdas)
     max_outer_iterations = 10  #wsiu
     max_inner_iterations = 5   #wsiu
 
     for i in 1:max_outer_iterations
         for j in 1:max_inner_iterations
             s1 = generate_neighbor(s0)
-            s1_score = compute_score(s1)
+            s1_score = compute_score(instance, s1, lambdas)
             delta = s1_score - s0_score
 
             if delta < 0    # "if s1 minimizes more the function" -- temp comment
@@ -173,10 +173,52 @@ end
 
 
 
-#TODO
-function compute_score(solution::ProblemSolution, lambdas::Array{Float16})::Float32
-    return 42.0 + solution.solution_matrix[1]
+function compute_score( instance::ProblemInstance, 
+                        solution::ProblemSolution, 
+                        lambdas::Array{Float16,1})::Float32
+    
+    total_distance = compute_total_distance_traveled(instance, solution)
+    
+    total_tardiness = 0
+    max_tardiness = 0
+    for (patient_service, time_solution) in solution.t
+    
+        total_tardiness += time_solution.tardiness
+        if time_solution.tardiness > max_tardiness
+            max_tardiness = time_solution.tardiness
+        end
+    end
+    
+    score = ((lambdas[1]*total_distance) +
+            (lambdas[2]*total_tardiness) +
+            (lambdas[3]*max_tardiness))
+    
+    return score
 end
+
+
+function compute_total_distance_traveled(instance::ProblemInstance, 
+                                        solution::ProblemSolution)::Float32
+
+    total_distance = 0
+    for vehicle in 1:instance.number_vehicles
+       
+        previous_location = 1
+        for (location, service) in solution.o[vehicle, :]
+            
+            if location == -1
+                continue 
+            end
+            
+            total_distance += get_time_distance(instance, previous_location, location)
+            previous_location = location
+            
+        end
+    end
+    
+    return total_distance
+end
+
 
 #TODO
 function generate_neighbor(solution::ProblemSolution)::ProblemSolution
