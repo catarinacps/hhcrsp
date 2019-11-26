@@ -57,8 +57,21 @@ struct ProblemSolution
 
     o::Array{Pair{Int16, Int16}, 2}
 
-    t::Array{Int16, 2}
+    # the key represents the patient/service pair
+    # the value is a time struct with starting time, ending time and tardiness
+    t::Dict{Pair{Int16, Int16}, TimeSolution}
 end
+
+
+struct TimeSolution
+
+    starting::Int16
+    ending::Int16
+    tardiness::Int16
+
+end
+
+
 
 struct DecisionVariables
     x::Array{Bool, 4}
