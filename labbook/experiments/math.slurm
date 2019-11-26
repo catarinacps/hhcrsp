@@ -49,9 +49,9 @@ mkdir cbc
 CBC_PATH=$(readlink -f cbc)
 mv coinbrew build
 pushd build
-./coinbrew fetch Cbc
-./coinbrew build Cbc --prefix=$CBC_PATH --test
-./coinbrew install
+./coinbrew fetch Cbc --no-prompt
+./coinbrew build Cbc --prefix=$CBC_PATH --no-prompt --test
+./coinbrew install --no-prompt
 popd
 
 # cause its missing this one lib
