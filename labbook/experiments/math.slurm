@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=72:00:00
+#SBATCH --time=24:00:00
 #SBATCH --chdir=.
 #SBATCH --partition=hype
 #SBATCH --nodes=1
@@ -41,6 +41,7 @@ wget https://julialang-s3.julialang.org/bin/linux/x64/1.2/julia-1.2.0-linux-x86_
 tar xzf julia-1.2.0-linux-x86_64.tar.gz
 mv julia-1.2.0 julia
 wget https://bintray.com/coin-or/download/download_file\?file_path\=Cbc-2.10-linux-x86_64-gcc5.4.0.tgz -O cbc-2.10.tgz
+mkdir cbc
 tar xzf cbc-2.10.tgz -C cbc
 
 JL_PATH=$(readlink -f julia)
