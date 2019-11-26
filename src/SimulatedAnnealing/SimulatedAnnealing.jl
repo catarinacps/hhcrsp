@@ -39,8 +39,17 @@ function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Boo
 
     for i in 1:max_outer_iterations
         for j in 1:max_inner_iterations
-            s1 = generate_neighbor(s0)
+            s1 = generate_neighbor(instance, s0)
             s1_score = compute_score(instance, s1, lambdas)
+            println("\n\n")
+            Base.print_matrix(stdout, s0.o)
+            println("\n\n")
+            Base.print_matrix(stdout, s1.o)
+            println("\n\n")
+            println("score 0: ", s0_score)
+            println("score 1: ", s1_score)
+            throw("debg")
+
             delta = s1_score - s0_score
 
             if delta < 0    # "if s1 minimizes more the function" -- temp comment
@@ -237,7 +246,7 @@ function generate_neighbor(instance::ProblemInstance, solution::ProblemSolution)
         possible_rows = get_possible_rows(instance, service, x)
         
         if isempty(possible_rows)
-            change_columns(neighbor)
+            swap_columns(neighbor)
             
         else
             change_to_row = rand(possible_rows)
