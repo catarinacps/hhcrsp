@@ -25,31 +25,17 @@
     - the third vehicle attends patients 3 and 6
 
 
-    service_start_times is an array (2d) containing the starting times for each service
-
-    service_start_times example (for the above solution)
-        - i(s): patient i, service s
-        - t(i,v,s): starting time for service s at patient i with vehicle v
-
-         pat  |  1  | 2  |  3  |  4  |  5  |  6  |  7 |
-    ----------|-----|----|-----|-----|-----|-----|----|
-      i(s)    | 7(1)|4(1)| 2(2)| 3(3)| 6(3)| 5(1)|7(2)|
-    ----------|-----|----|-----|-----|-----|-----|----|
-    t(i,1,s)  | 23  |84  |     |     |     |112  |    |
-    ----------|-----|----|-----|-----|-----|-----|----|
-    t(i,2,s)  |     |    | 82  |     |     |     |124 |
-    ----------|-----|----|-----|-----|-----|-----|----|
-    t(i,3,s)  |     |    |     | 15  |107  |     |    |
-    ----------|-----|----|-----|-----|-----|-----|----|
-
-    t(i,v,s) is calculated as follows:
-
-    t(i,v,s) = max( e(i), b(i,v) )
-        - e(i): begin time window of patient i
-        - b(i,v): t(k,v,s) +  p(k,s) + d(k,i)
-            - p(k,s): processing time of service s at patient k
-            - d(k,i): traveling distance between k and i
 """
+
+struct TimeSolution
+
+    starting::Float32
+    ending::Float32
+    tardiness::Float32
+
+end
+
+
 struct ProblemSolution
     # dictionary containing:
     # (patient, service) => (x, y)
@@ -60,15 +46,6 @@ struct ProblemSolution
     # the key represents the patient/service pair
     # the value is a time struct with starting time, ending time and tardiness
     t::Dict{Pair{Int16, Int16}, TimeSolution}
-end
-
-
-struct TimeSolution
-
-    starting::Int16
-    ending::Int16
-    tardiness::Int16
-
 end
 
 

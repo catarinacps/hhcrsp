@@ -1,6 +1,12 @@
 module SimulatedAnnealing
 
-using ..Utils: ProblemInstance, ProblemSolution
+using ..Utils: ProblemInstance, 
+                TimeSolution, 
+                ProblemSolution,
+                get_start_time_window,
+                get_end_time_window,
+                get_time_distance,
+                get_processing_time
 
 """
     solve(instance[, verbose])
@@ -62,7 +68,7 @@ function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
     
     patient_service_list = generate_patient_service_list(instance)
     patient_service_list = sort_patients_by_ending_time(patient_service_list)
-    solution_dict = Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}()
+    indexes = Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}()
     
     x = length(patient_service_list)
     y = instance.number_vehicles
@@ -74,13 +80,12 @@ function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
             
             vehicle = get_vehicle(patient_service.second, instance)
             o_matrix[vehicle, index] = patient_service
-            merge!(solution_dict, Dict((patient_service) => (vehicle => index)))
+            merge!(indexes, Dict((patient_service) => (vehicle => index)))
     end
     
-    #TODO
-    # COMPUTE STARTING TIME MATRIX
+    time_solutions = compute_time_solutions(instance, o_matrix)
     
-    return #TODO
+    return ProblemSolution(indexes, o_matrix, time_solutions)
 end
 
 
@@ -126,6 +131,46 @@ function get_vehicle(service, instance)
     
     return rand(possible_vehicles)
 end
+
+
+function compute_time_solutions(instance, o_matrix)::Dict{Pair{Int16, Int16}, TimeSolution}
+   
+    t_dict = Dict{Pair{Int16, Int16}, TimeSolution}()
+
+    for vehicle in 1:instance.number_vehicles
+    
+        previous_ending_time = 0
+        previous_visited = 1
+        for patient_service in o_matrix[vehicle, :]
+            
+            patient = patient_service.first
+            service = patient_service.second
+            
+            if patient == -1
+                continue 
+            end
+            
+            beginning_time_window = get_start_time_window(instance, patient)
+            arrival_time = (previous_ending_time + 
+                            + get_time_distance(instance, previous_visited, patient))
+            
+            starting_time = max(beginning_time_window, arrival_time)
+            ending_time = starting_time + get_processing_time(instance, patient, vehicle, service)
+            
+            end_time_window = get_end_time_window(instance, patient)
+            if ending_time > end_time_window
+                tardiness = ending_time - end_time_window
+            else
+                tardiness = 0
+            end
+
+            merge!(t_dict, Dict((patient_service) => TimeSolution(starting_time, ending_time, tardiness)))     
+        end  
+    end
+    
+    return t_dict
+end
+
 
 
 #TODO

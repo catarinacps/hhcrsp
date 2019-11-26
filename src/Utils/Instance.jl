@@ -24,6 +24,23 @@ struct ProblemInstance
     time_windows::Array{Int16, 2}
 end
 
+function get_start_time_window(instance, patient)::Float32
+    return  instance.time_windows[1, patient]
+ end
+ 
+ function get_end_time_window(instance, patient)::Float32
+    return  instance.time_windows[2, patient]
+ end
+ 
+ function get_time_distance(instance, from, to)::Float32
+    return  instance.distances[from, to]
+ end
+ 
+ function get_processing_time(instance, patient, vehicle, service)::Float32
+     return instance.processing_times[patient, vehicle, service]
+ end
+
+
 function Base.show(io::IO, inst::ProblemInstance)
     # loads of prints
 
