@@ -44,6 +44,9 @@ wget https://bintray.com/coin-or/download/download_file\?file_path\=Cbc-2.10-lin
 mkdir cbc
 tar xzf cbc-2.10.tgz -C cbc
 
+# cause its missing this one lib
+ln -s $(find ~/Installs -name 'libgfortran.so.3') cbc/lib/libgfortran.so.3
+
 # update env vars
 LD_LIBRARY_PATH+=:$(readlink -f cbc/lib)
 LD_LIBRARY_PATH+=:$(readlink -f julia/lib)
