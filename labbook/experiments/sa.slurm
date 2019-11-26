@@ -36,24 +36,6 @@ rm -rf *
 mkdir $EXP_NAME
 pushd $EXP_NAME
 
-# get binaries
-wget https://julialang-s3.julialang.org/bin/linux/x64/1.2/julia-1.2.0-linux-x86_64.tar.gz
-tar xzf julia-1.2.0-linux-x86_64.tar.gz
-mv julia-1.2.0 julia
-
-# update env vars
-LD_LIBRARY_PATH+=:$(readlink -f julia/lib)
-LD_LIBRARY_PATH+=:$(readlink -f julia/lib/julia)
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH
-
-PATH+=:$(readlink -f julia/bin)
-export PATH=$PATH
-
-NUM_THREADS=$(lscpu | grep '^CPU(s):' | awk '{print $2}')
-NUM_NUMA_NODES=$(lscpu | grep '^NUMA node(s)' | awk '{print $3}')
-
-USABLE_CPUS=$(($NUM_THREADS / $NUM_NUMA_NODES))
-
 # copy the code folder
 cp -r $CODE_DIR code
 mkdir results
