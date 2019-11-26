@@ -30,11 +30,11 @@ function solve(instance::ProblemInstance,
                 lambdas::Array{Float16} ; 
                 verbose::Bool = false)::Tuple{ProblemSolution, Float64}
 
-    # what should i use? => wsiu
-    T = Float32(100.0) #wsiu
-    cooling_method = Int16(2)
-    cooling_factor = Float32(0.9) # recall the reference that said to use a value between [0.88 and 0.99] 
-    max_outer_iterations = 100  #wsiu
+
+    T = Float32(100.0) 
+    cooling_strategy = Int16(2)
+    cooling_factor = Float32(0.9) # seek for the reference that said to use a value between [0.88 and 0.99] 
+    max_outer_iterations = 100 
     max_inner_iterations = 10   
     # note: total iterations = max outer * max inner
 
@@ -78,7 +78,7 @@ function solve(instance::ProblemInstance,
             end
 
         end
-        T = update_temperature(T, cooling_factor, cooling_method, Int16(i))
+        T = update_temperature(T, cooling_factor, cooling_strategy, Int16(i))
     end
 
     if s_best_score > s0_score
@@ -330,11 +330,11 @@ end
 
 function update_temperature(temperature::Float32, 
                             cooling_factor::Float32, 
-                            cooling_method::Int16,
+                            cooling_strategy::Int16,
                             outer_iteration::Int16)::Float32
     
     # Linear cooling
-    if cooling_method == 1
+    if cooling_strategy == 1
         return temperature * cooling_factor
     
     # Logarithmical multiplicative cooling
