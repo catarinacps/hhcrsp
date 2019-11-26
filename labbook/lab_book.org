@@ -188,7 +188,7 @@ while read -r id instance; do
         instances/Instanz${instance}.txt \
         math > $log_file
 
-    numactl -C 0 -m 0 cbc \
+    cbc \
         -timemo elapsed \
         -thread $USABLE_CPUS \
         -import model.lp \
