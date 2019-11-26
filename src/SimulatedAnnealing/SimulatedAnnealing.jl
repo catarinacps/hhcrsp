@@ -32,9 +32,10 @@ function solve(instance::ProblemInstance,
 
     # what should i use? => wsiu
     T = Float32(100.0) #wsiu
+    cooling_method = Int16(2)
     cooling_factor = Float32(0.9) # recall the reference that said to use a value between [0.88 and 0.99] 
     max_outer_iterations = 100  #wsiu
-    max_inner_iterations = 10   #wsiu
+    max_inner_iterations = 10   
     # note: total iterations = max outer * max inner
 
 
@@ -70,14 +71,14 @@ function solve(instance::ProblemInstance,
 
             if verbose
                 println("\n\n")
-                println("SA iteration: ", j + ((i-1)*10))
+                println("SA iteration: ", j + ((i-1)*max_inner_iterations))
                 println("Temperature: ", T)
                 println("Best score overall: ", s_best_score)
                 println("Current score: ", s0_score)
             end
 
         end
-        T = update_temperature(T, cooling_factor)
+        T = update_temperature(T, cooling_factor, cooling_method, Int16(i))
     end
 
     if s_best_score > s0_score
@@ -327,12 +328,21 @@ function get_possible_rows(instance::ProblemInstance, service::Int16, row::Int16
 end
 
 
-function update_temperature(temperature::Float32, cooling_factor::Float32)::Float32
-    # The following implementation is based on the handout of the course,
-    # but this is the simplest way to reduce the temperature.
-    # On Goldberg et. al. (2016, p. 111) there are several other sophisticated
-    # ways of doing that.
-    return temperature * cooling_factor
+function update_temperature(temperature::Float32, 
+                            cooling_factor::Float32, 
+                            cooling_method::Int16,
+                            outer_iteration::Int16)::Float32
+    
+    # Linear cooling
+    if cooling_method == 1
+        return temperature * cooling_factor
+    
+    # Logarithmical multiplicative cooling
+    # Aarts, E.H.L. & Korst, J., 1989
+    else
+        alpha = 1.01
+        return temperature / (1 + alpha * log(1 + outer_iteration))
+    end
 end
 
 end # module
