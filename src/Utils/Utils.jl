@@ -4,6 +4,6 @@ include("./Parsing.jl")
 include("./Instance.jl")
 include("./Solution.jl")
 
-export parse_commandline, parse_instance, ProblemInstance, ProblemSolution
+export parse_commandline, parse_instance, ProblemInstance, ProblemSolution, TimeSolution, DecisionVariables
 
 end
