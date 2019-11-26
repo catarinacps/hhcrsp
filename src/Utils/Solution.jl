@@ -1,3 +1,9 @@
+struct TimeSolution
+    starting::Int16
+    ending::Int16
+    tardiness::Int16
+end
+
 """
     ProblemSolution(Dict, Array, Array)
 
@@ -47,7 +53,6 @@ struct ProblemSolution
     # the value is a time struct with starting time, ending time and tardiness
     t::Dict{Pair{Int16, Int16}, TimeSolution}
 end
-
 
 
 struct DecisionVariables

@@ -1,7 +1,9 @@
 OUT_DIR := build
 SRC_DIR := src
 
-JC := julia $(shell find ~/.julia -name juliac.jl)
+JULIA_PATH ?= ~/.julia
+
+JC := julia $(shell find $(JULIA_PATH) -name juliac.jl)
 
 ################################################################################
 #	Files:

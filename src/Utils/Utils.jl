@@ -4,6 +4,7 @@ include("./Parsing.jl")
 include("./Instance.jl")
 include("./Solution.jl")
 
+
 export parse_commandline, 
         parse_instance,
         get_start_time_window,
@@ -12,6 +13,6 @@ export parse_commandline,
         get_processing_time, 
         ProblemInstance, 
         TimeSolution, 
-        ProblemSolution
-        
-end
+        ProblemSolution,
+        DecisionVariables
+ end
