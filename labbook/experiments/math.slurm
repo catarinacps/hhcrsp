@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=24:00:00
 #SBATCH --chdir=.
-#SBATCH --partition=hype
+#SBATCH --partition=cei
 #SBATCH --nodes=1
 #SBATCH --output=%x_%j.out
 #SBATCH --error=%x_%j.err
@@ -44,8 +44,6 @@ wget https://bintray.com/coin-or/download/download_file\?file_path\=Cbc-2.10-lin
 mkdir cbc
 tar xzf cbc-2.10.tgz -C cbc
 
-JL_PATH=$(readlink -f julia)
-
 # update env vars
 LD_LIBRARY_PATH+=:$(readlink -f cbc/lib)
 LD_LIBRARY_PATH+=:$(readlink -f julia/lib)
@@ -72,7 +70,7 @@ results_dir=$(readlink -f results)
 pushd code
 
 # build so we run faster
-make JULIA_PATH=$JL_PATH
+make
 
 # init the csv results file
 echo "id,instance,score,gap" > $results_csv
