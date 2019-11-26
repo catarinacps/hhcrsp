@@ -39,16 +39,17 @@ pushd code
 make
 
 # init the csv results file
-echo "instance,temperature,strategy,factor,iterations,score" > $results_csv
+echo "instance,temperature,strategy,factor,iterations_outer,iterations_inner,score" > $results_csv
 
 # math solver
 while read -r instance temperature strategy factor iterations; do
-    csv_line=${instance},${temperature},${strategy},${factor},${iterations}
+    iterations=${iterations//\"}
+    csv_line=${instance},${temperature},${strategy},${factor},${iterations// /,}
 
     echo
     echo "--> Running with params: $instance $temperature $strategy $factor $iterations"
 
-    log_file=$results_dir/${instance}_${temperature}_${strategy}_${factor}_${iterations}.log
+    log_file=$results_dir/${instance}_${temperature}_${strategy}_${factor}_${iterations// /_}.log
 
     ./build/hhcrsp \
         -t $temperature \
