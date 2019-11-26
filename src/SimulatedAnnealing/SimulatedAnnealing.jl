@@ -141,10 +141,7 @@ function compute_time_solutions(instance, o_matrix)::Dict{Pair{Int16, Int16}, Ti
     
         previous_ending_time = 0
         previous_visited = 1
-        for patient_service in o_matrix[vehicle, :]
-            
-            patient = patient_service.first
-            service = patient_service.second
+        for (patient, service) in o_matrix[vehicle, :]
             
             if patient == -1
                 continue 
@@ -164,7 +161,10 @@ function compute_time_solutions(instance, o_matrix)::Dict{Pair{Int16, Int16}, Ti
                 tardiness = 0
             end
 
-            merge!(t_dict, Dict((patient_service) => TimeSolution(starting_time, ending_time, tardiness)))     
+            merge!(t_dict, Dict((patient => service) => TimeSolution(starting_time, ending_time, tardiness)))     
+
+            previous_ending_time = ending_time
+            previous_visited = patient
         end  
     end
     
