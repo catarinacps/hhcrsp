@@ -220,10 +220,59 @@ function compute_total_distance_traveled(instance::ProblemInstance,
 end
 
 
-#TODO
-function generate_neighbor(solution::ProblemSolution)::ProblemSolution
-    return ProblemSolution(zeros(Int16, 3, 7), zeros(Int16, 3, 7))
+# there are two random ways which can generate a neighbor
+# 1: swapping two columns from the o matrix
+# 2: changing row of a (patient, service) pair in the o matrix
+function generate_neighbor(instance::ProblemInstance, solution::ProblemSolution)::ProblemSolution
+    
+    neighbor = deepcopy(solution)
+    
+    way = rand([1,2])
+    if way == 1
+        swap_columns(neighbor)
+        
+    else # change row (if it's changeable)
+        
+        (patient, service), (x, y) = rand(neighbor.indexes)
+        possible_rows = get_possible_rows(instance, service, x)
+        
+        if isempty(possible_rows)
+            change_columns(neighbor)
+            
+        else
+            change_to_row = rand(possible_rows)
+            neighbor.o[x,y] = (Int16(-1) => Int16(-1)) 
+            neighbor.o[change_to_row, y] = (patient => service)
+        end
+    end
+    
+    return neighbor
 end
+
+
+function swap_columns(neighbor::ProblemSolution)
+    
+    col1 = rand(1:length(neighbor.o[1, :]))
+    col2 = rand(1:length(neighbor.o[1, :]))
+        
+    temp_col_content = neighbor.o[:, col2]
+    neighbor.o[:, col2] = neighbor.o[:, col1]
+    neighbor.o[:, col1] = temp_col_content
+end
+
+
+function get_possible_rows(instance::ProblemInstance, service::Int16, row::Int16)::Array{Int16,1}
+    
+    possible_rows = []
+    for vehicle in 1:instance.number_vehicles
+        if instance.qualifications[vehicle, service] && vehicle != row
+            push!(possible_rows, vehicle)
+        end
+    end
+
+    return possible_rows
+end
+
 
 function update_temperature(temperature::Float32, cooling_factor::Float32)::Float32
     # The following implementation is based on the handout of the course,
