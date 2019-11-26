@@ -26,13 +26,16 @@ data, and can be verbose about its progress when given an `verbose` flag.
 
 See also: [`parse_instance`](@ref)
 """
-function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Bool = false)::ProblemSolution
+function solve(instance::ProblemInstance, 
+                lambdas::Array{Float16} ; 
+                verbose::Bool = false)::Tuple{ProblemSolution, Float64}
 
     # what should i use? => wsiu
     T = Float32(100.0) #wsiu
     cooling_factor = Float32(0.9) # recall the reference that said to use a value between [0.88 and 0.99] 
     max_outer_iterations = 100  #wsiu
     max_inner_iterations = 10   #wsiu
+    # note: total iterations = max outer * max inner
 
 
     s0 = generate_initial_solution(instance)
@@ -71,7 +74,6 @@ function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Boo
                 println("Temperature: ", T)
                 println("Best score overall: ", s_best_score)
                 println("Current score: ", s0_score)
-
             end
 
         end
@@ -79,10 +81,10 @@ function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Boo
     end
 
     if s_best_score > s0_score
-        return s_best
+        return (s_best, s_best_score)
     end
 
-    return s0
+    return (s0, s0_score)
 end
 
 
@@ -90,7 +92,7 @@ end
 function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
     
     patient_service_list = generate_patient_service_list(instance)
-    patient_service_list = sort_patients_by_ending_time(patient_service_list)
+    patient_service_list = sort_patients_by_ending_time(instance, patient_service_list)
     indexes = Dict{Pair{Int16, Int16}, Pair{Int16, Int16}}()
     
     x = length(patient_service_list)
@@ -112,7 +114,7 @@ function generate_initial_solution(instance::ProblemInstance)::ProblemSolution
 end
 
 
-function generate_patient_service_list(instance::ProblemInstance)
+function generate_patient_service_list(instance::ProblemInstance)::Array{Pair{Int16, Int16}}
     
     patient_service_list = []
     
@@ -132,11 +134,39 @@ function generate_patient_service_list(instance::ProblemInstance)
 end
 
 
-#TODO
-function sort_patients_by_ending_time(patient_service_list)
-    
-    return patient_service_list
+function sort_patients_by_ending_time(  instance::ProblemInstance, 
+    patient_service_list::Array{Pair{Int16, Int16}})::Array{Pair{Int16, Int16}}
 
+    sortable_patient_service_list = []
+
+    for patient_service in patient_service_list
+        push!(sortable_patient_service_list, build_sortable_tuple(instance, patient_service))
+    end
+
+    sorted_patient_service_list = sort_patient_service(sortable_patient_service_list)
+    return sorted_patient_service_list
+end
+
+
+function sort_patient_service(sortable_patient_service_list)::Array{Pair{Int16, Int16}}
+   
+    sort!(sortable_patient_service_list, by = x -> x[2])
+    
+    # Remove ending time window from data structure
+    sorted_patient_service_list = []
+    for (patient_service, ending_time) in sortable_patient_service_list
+        push!(sorted_patient_service_list, patient_service)
+    end
+    return sorted_patient_service_list
+end
+
+# Tuple: ((Patient => Service), Patient Ending Time Window)
+function build_sortable_tuple(instance::ProblemInstance, 
+            patient_service::Pair{Int16, Int16})::Tuple{Pair{Int16, Int16}, Int16}
+
+    patient = patient_service.first
+    ending_time_window = instance.time_windows[2, patient] 
+    return (patient_service, ending_time_window)
 end
 
 
