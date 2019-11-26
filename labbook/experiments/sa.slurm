@@ -42,7 +42,7 @@ make
 echo "instance,temperature,strategy,factor,iterations_outer,iterations_inner,score" > $results_csv
 
 # math solver
-while read -r instance temperature strategy factor iterations; do
+while read -r instance temperature factor strategy iterations; do
     iterations=${iterations//\"}
     csv_line=${instance},${temperature},${strategy},${factor},${iterations// /,}
 
