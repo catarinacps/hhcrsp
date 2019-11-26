@@ -1,14 +1,6 @@
 #!/bin/bash
-#SBATCH --time=24:00:00
-#SBATCH --chdir=.
-#SBATCH --partition=cei
-#SBATCH --nodes=1
-#SBATCH --output=%x_%j.out
-#SBATCH --error=%x_%j.err
-#SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=hcpsilva@inf.ufrgs.br
 
-set -euo pipefail
+set -euxo pipefail
 
 HOST=$(hostname)
 
