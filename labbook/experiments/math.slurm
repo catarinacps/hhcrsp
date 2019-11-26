@@ -40,9 +40,19 @@ pushd $EXP_NAME
 wget https://julialang-s3.julialang.org/bin/linux/x64/1.2/julia-1.2.0-linux-x86_64.tar.gz
 tar xzf julia-1.2.0-linux-x86_64.tar.gz
 mv julia-1.2.0 julia
-wget https://bintray.com/coin-or/download/download_file\?file_path\=Cbc-2.10-linux-x86_64-gcc5.4.0.tgz -O cbc-2.10.tgz
+
+# install from flipping source
+wget https://raw.githubusercontent.com/coin-or/coinbrew/master/coinbrew
+chmod +x coinbrew
+mkdir build
 mkdir cbc
-tar xzf cbc-2.10.tgz -C cbc
+CBC_PATH=$(readlink -f cbc)
+mv coinbrew build
+pushd build
+./coinbrew fetch Cbc
+./coinbrew build Cbc --prefix=$CBC_PATH --test
+./coinbrew install
+popd
 
 # cause its missing this one lib
 ln -s $(find ~/Installs -name 'libgfortran.so.3') cbc/lib/libgfortran.so.3
@@ -98,7 +108,7 @@ while read -r id instance; do
         -import model.lp \
         -sec 300 \
         -solve \
-        -sol sol.lp >> $log_file
+        -solu sol.lp >> $log_file
 
     obj_value=$(grep '^Objective' $log_file | awk '{print $3}')
 
