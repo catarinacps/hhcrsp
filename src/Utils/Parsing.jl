@@ -47,6 +47,8 @@ function parse_commandline(arguments_list::Vector{String})
 
     add_arg_group(s, "simulated annealing")
 
+    cooling_strats = [Int16(1), Int16(2)]
+
     @add_arg_table s begin
         "sa"
         help = "solve using the simulated annealing heuristic"
@@ -54,8 +56,25 @@ function parse_commandline(arguments_list::Vector{String})
 
         "--temperature", "-t"
         help = "initial temperature for simulated annealing"
-        arg_type = Float16
-        default = Float16(30.0)
+        arg_type = Float32
+        default = Float32(100.0)
+
+        "--strategy", "-g"
+        range_tester = (x -> x in cooling_strats)
+        default = Int16(1)
+        arg_type = Int16
+        help = "cooling strategy; must be one of {" * join(cooling_strats, "|") * "}"
+
+        "--factor", "-f"
+        default = Float32(0.9)
+        arg_type = Float32
+        help = "the cooling factor for the cooling function"
+
+        "--iterations", "-i"
+        default = [100, 10]
+        nargs = 2
+        arg_type = Int64
+        help = "the number of outer and inner iterations, respectively"
     end
 
     return parse_args(arguments_list, s)
