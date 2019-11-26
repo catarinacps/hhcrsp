@@ -27,34 +27,35 @@ data, and can be verbose about its progress when given an `verbose` flag.
 See also: [`parse_instance`](@ref)
 """
 function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Bool = false)::ProblemSolution
-    # Parameters (i'll just leave 'em here cause idk what to do)
-    # what should i use? => wsiu
 
-    T = 100.0 #wsiu
-    cooling_factor = 0.9
+    # what should i use? => wsiu
+    T = Float32(100.0) #wsiu
+    cooling_factor = Float32(0.9) # recall the reference that said to use a value between [0.88 and 0.99] 
+    max_outer_iterations = 100  #wsiu
+    max_inner_iterations = 10   #wsiu
+
+
     s0 = generate_initial_solution(instance)
     s0_score = compute_score(instance, s0, lambdas)
-    max_outer_iterations = 10  #wsiu
-    max_inner_iterations = 5   #wsiu
+    s_best = deepcopy(s0)
+    s_best_score = deepcopy(s0_score)
+    
 
     for i in 1:max_outer_iterations
         for j in 1:max_inner_iterations
             s1 = generate_neighbor(instance, s0)
             s1_score = compute_score(instance, s1, lambdas)
-            println("\n\n")
-            Base.print_matrix(stdout, s0.o)
-            println("\n\n")
-            Base.print_matrix(stdout, s1.o)
-            println("\n\n")
-            println("score 0: ", s0_score)
-            println("score 1: ", s1_score)
-            throw("debg")
-
+        
             delta = s1_score - s0_score
 
-            if delta < 0    # "if s1 minimizes more the function" -- temp comment
+            if delta < 0
                 s0 = s1
                 s0_score = s1_score
+                
+                if s0_score < s_best_score
+                    s_best = deepcopy(s0)
+                    s_best_score = deepcopy(s0_score)
+                end
 
             else
                 x = rand()
@@ -64,8 +65,21 @@ function solve(instance::ProblemInstance, lambdas::Array{Float16} ; verbose::Boo
                 end
             end
 
+            if verbose
+                println("\n\n")
+                println("SA iteration: ", j + ((i-1)*10))
+                println("Temperature: ", T)
+                println("Best score overall: ", s_best_score)
+                println("Current score: ", s0_score)
+
+            end
+
         end
         T = update_temperature(T, cooling_factor)
+    end
+
+    if s_best_score > s0_score
+        return s_best
     end
 
     return s0
