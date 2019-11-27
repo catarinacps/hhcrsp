@@ -40,9 +40,17 @@ pushd $EXP_NAME
 wget https://julialang-s3.julialang.org/bin/linux/x64/1.2/julia-1.2.0-linux-x86_64.tar.gz
 tar xzf julia-1.2.0-linux-x86_64.tar.gz
 mv julia-1.2.0 julia
+
 wget https://bintray.com/coin-or/download/download_file\?file_path\=Cbc-2.10-linux-x86_64-gcc5.4.0.tgz -O cbc-2.10.tgz
 mkdir cbc
 tar xzf cbc-2.10.tgz -C cbc
+rm cbc/bin/cbc
+wget https://ampl.com/dl/open/cbc/cbc-linux64.zip
+unzip cbc-linux64.zip -d cbc/bin
+rm cbc-linux64.zip
+
+# cause its missing this one lib
+ln -s $(find ~/Installs -name 'libgfortran.so.3') cbc/lib/libgfortran.so.3
 
 # update env vars
 LD_LIBRARY_PATH+=:$(readlink -f cbc/lib)
@@ -89,13 +97,13 @@ while read -r id instance; do
         instances/Instanz${instance}.txt \
         math > $log_file
 
-    numactl -C 0 -m 0 cbc \
+    cbc \
         -timemo elapsed \
         -thread $USABLE_CPUS \
         -import model.lp \
         -sec 300 \
         -solve \
-        -sol sol.lp >> $log_file
+        -solu sol.lp >> $log_file
 
     obj_value=$(grep '^Objective' $log_file | awk '{print $3}')
 

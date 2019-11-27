@@ -42,9 +42,20 @@ Base.@ccallable function julia_main(ARGS::Vector{String})::Cint
     elseif parsed_args["%COMMAND%"] == "sa"
         # gather either defined or default values
         lambdas = parsed_args["lambda"]
-        SimulatedAnnealing.solve(instance, lambdas, verbose = verbose)
+        temperature = parsed_args["temperature"]
+        strategy = parsed_args["strategy"]
+        factor = parsed_args["factor"]
+        iterations = parsed_args["iterations"]
 
-        # do smth
+        ret = SimulatedAnnealing.solve(instance,
+                                       lambdas,
+                                       temperature,
+                                       strategy,
+                                       factor,
+                                       iterations,
+                                       verbose = verbose)
+
+        println("Score: $(ret.second)")
     end
 
     return 0
